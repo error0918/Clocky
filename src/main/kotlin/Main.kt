@@ -1,4 +1,3 @@
-// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @file:Suppress("OPT_IN_IS_NOT_ENABLED")
 
@@ -16,9 +15,9 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.window.*
-import java.time.LocalDateTime
-import kotlin.concurrent.timerTask
+import java.awt.Dimension
 
 
 fun main() = application {
@@ -55,18 +54,26 @@ fun main() = application {
             true
         }, //TODO
         onCloseRequest = ::exitApplication,
-        state = Main.state
+        state = Main.state,
+        alwaysOnTop = Main.alwaysOnTop
     ) {
+        this.window.minimumSize =
+            Dimension(
+                with(LocalDensity.current) { 600.dp.toPx().toInt() },
+                with(LocalDensity.current) { 500.dp.toPx().toInt() }
+            )
+
         Main.Main()
 
-        if (Settings.showSettings) {
-            Settings.Settings()
-        }
+        if (Settings.showSettings) Settings.Settings()
+
+        if(Clock.showMiniClock) Clock.MiniClock()
     }
 }
 
 object Main {
     lateinit var state: WindowState
+    var alwaysOnTop by mutableStateOf(false)
 
     var index by mutableStateOf(0)
 

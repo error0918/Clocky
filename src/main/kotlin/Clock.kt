@@ -1,8 +1,3 @@
-import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.DraggableState
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.window.WindowDraggableArea
@@ -16,32 +11,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.awt.ComposeDialog
-import androidx.compose.ui.draw.BlurredEdgeTreatment
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalWindowInfo
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import org.jetbrains.skia.FilterTileMode
-import org.jetbrains.skia.ImageFilter
-import org.jetbrains.skia.RuntimeEffect
-import java.awt.Dimension
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.*
-import javax.swing.JPanel
-import kotlin.collections.HashMap
-import kotlin.concurrent.timerTask
-import kotlin.reflect.KProperty
 
 object Clock {
+    var showMiniClock by mutableStateOf(false)
+
     var showDate by mutableStateOf(false)
     var showMillisecond by mutableStateOf(false)
 
@@ -50,10 +31,6 @@ object Clock {
         var showDropDownMenu by remember { mutableStateOf(false) }
 
         schedule()
-
-        // ----------------------------------------------------------- //
-
-        test()
 
         Box(
             modifier = Modifier.fillMaxSize()
@@ -101,18 +78,18 @@ object Clock {
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.Fullscreen,
-                                contentDescription = null
+                                contentDescription = "전체화면"
                             )
                         }
                     }
                     IconButton(
                         onClick = {
-
+                            showMiniClock = !showMiniClock
                         }
                     ) {
                         Icon(
                             imageVector = Icons.Filled.PictureInPicture,
-                            contentDescription = null
+                            contentDescription = "미니 버전 보기"
                         )
                     }
                     IconButton(
@@ -122,7 +99,7 @@ object Clock {
                     ) {
                         Icon(
                             imageVector = Icons.Filled.MoreVert,
-                            contentDescription = null
+                            contentDescription = "메뉴"
                         )
 
                         DropdownMenu(
@@ -198,16 +175,14 @@ object Clock {
             }
         }
     }
-
-    /////////////////////////////////////////////////////////////////
     @Composable
-    fun test() {
+    fun MiniClock() {
         val state = rememberWindowState(
             position = WindowPosition(Alignment.BottomEnd),
             size = DpSize(300.dp, 300.dp)
         )
         Window(
-            title = "saf",
+            title = "미니 시계",
             icon = rememberVectorPainter(Icons.Filled.LockClock),
             undecorated = true,
             onCloseRequest = {
@@ -238,7 +213,10 @@ object Clock {
                             ) {
                                 IconButton(
                                     onClick = {
-                                        //
+                                        Main.index = 0
+                                        Main.state.isMinimized = false
+                                        Main.alwaysOnTop = true
+                                        Main.alwaysOnTop = false
                                     }
                                 ) {
                                     Icon(
@@ -248,7 +226,7 @@ object Clock {
                                 }
                                 IconButton(
                                     onClick = {
-                                        //
+                                        showMiniClock = false
                                     }
                                 ) {
                                     Icon(
@@ -297,6 +275,5 @@ object Clock {
             }
         }
     }
-    ////////////////////////////////////////////////////////////////
 
 }

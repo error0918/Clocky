@@ -17,8 +17,9 @@ const val NAME = "Clocky"
 
 var dateTime by mutableStateOf<LocalDateTime>(LocalDateTime.of(2005, 9, 18, 0, 0))
 
-val dateTimeList = mutableStateListOf<LocalDateTime>()
-val dateTimeZone = mutableStateListOf<ZoneId>()
+val dateTimeList = mutableStateListOf<LocalDateTime>(LocalDateTime.of(2005, 9, 18, 0, 0))
+val dateTimeZone = mutableStateListOf<ZoneId>(ZoneId.of("Asia/Seoul"))
+var selectedZoneIndex by mutableStateOf<Int?>(null)
 
 fun schedule() {
     java.util.Timer().schedule(
